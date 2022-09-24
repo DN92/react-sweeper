@@ -1,0 +1,48 @@
+/* Utility classes */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.required::after{
+  content: " *";
+  color: red;
+}
+
+.underlined {
+  text-decoration: underline;
+}
+
+.opacity-zero {
+  opacity: 0;
+}
+
+.table-head-shader {
+  background-color: var(--clr-white) !important;
+}
+
+.red {
+  color: red !important
+}
+
+.margin-right-halfRem {
+  margin-right: .5rem;
+}
+
+.box-shadow1 {
+  box-shadow: rgb(0 0 0 / 4%) 0px 0.4px 0.5px -9px,
+    rgb(0 0 0 / 6%) 0px 0.9px 1.1px -9px,
+    rgb(0 0 0 / 7%) 0px 1.8px 2.1px -9px,
+    rgb(0 0 0 / 8%) 0px 3.1px 3.8px -9px,
+    rgb(0 0 0 / 10%) 0px 5.8px 7.1px -9px,
+    rgb(0 0 0 / 14%) 0px 14px 17px -9px,
+    rgb(0 0 0 / 5%) 0px 0px 15px;
+}

@@ -1,0 +1,9 @@
+{
+  "root": true,
+  "extends": ["fullstack", "prettier", "prettier/react"],
+  "avoidEscape": true,
+  "rules": {
+    "semi": 0,
+    "no-unused-vars": false
+  }
+}
