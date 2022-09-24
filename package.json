@@ -1,7 +1,10 @@
 {
-  "name": "react-nosock-boilerplate",
+  "name": "react-sweeper",
   "version": "1.0.0",
   "description": "React Express PG Sequelize boilerplate",
+  "resolutions": {
+    "styled-components": "^5"
+  },
   "scripts": {
     "build": "webpack --mode production",
     "build:dev": "npm run build -- --watch --mode=development",
@@ -38,6 +41,7 @@
     "react-syntax-highlighter": "^15.5.0",
     "sequelize": "^6.23.1",
     "sqlite3": "^5.1.1",
+    "styled-components": "^5.3.5",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
@@ -46,6 +50,7 @@
     "@babel/preset-react": "^7.18.6",
     "@babel/register": "^7.18.9",
     "babel-loader": "^8.2.5",
+    "babel-plugin-styled-components": "^2.0.7",
     "css-loader": "^6.7.1",
     "eslint": "^8.23.1",
     "eslint-plugin-react": "^7.31.8",

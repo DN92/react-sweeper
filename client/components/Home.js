@@ -1,8 +1,9 @@
 import React from 'react'
+import GameCellSingle from './gameBoard/GameCellSingle'
 
 const Home = (props) => (
   <div>
-    This is filler Test
+    <GameCellSingle />
   </div>
 )
 

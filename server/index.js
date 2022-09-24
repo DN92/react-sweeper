@@ -3,6 +3,7 @@ const express = require('express')
 const path = require('path')
 const morgan = require('morgan')
 const compression = require('compression')
+const pkg = require('../package.json')
 
 process.env.PORT = process.env.PORT || 8083
 
@@ -53,7 +54,7 @@ app.use((err, req, res, next) => {
 })
 
 function bootStartApp() {
-  console.log('Creating Server: ' + (process.env.DATABASE_NAME || 'no name provided'))
+  console.log('Creating Server: ' + (process.env.DATABASE_NAME || pkg.name || 'no name provided'))
   if (require.main === module) {
     return (startServer())
   }
