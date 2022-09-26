@@ -1,9 +1,9 @@
 import React from 'react'
-import GameCellSingle from './gameBoard/GameCellSingle'
+import GameContainer from './gameContainer/GameContainer'
 
-const Home = (props) => (
+const Home = () => (
   <div>
-    <GameCellSingle />
+    <GameContainer />
   </div>
 )
 

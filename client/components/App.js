@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import FrontEndRoutes from '../FrontEndRoutes'
 
+
 const App = () => {
 
   return (

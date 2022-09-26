@@ -1,0 +1,11 @@
+{
+  "root": true,
+  "parser": "babel-eslint",
+  "extends": ["airbnb", "airbnb/hooks"],
+  "avoidEscape": true,
+  "rules": {
+    "semi": 0,
+    "no-unused-vars": false
+  },
+  "plugins": ["react", "react-hooks", "jsx-a11y", "import"]
+}

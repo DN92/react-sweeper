@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useMemo} from 'react'
 
 const remSize = 2
 const remAsString = `${remSize}rem`
@@ -7,6 +7,15 @@ const boardCellBaseStyle = {
   height: remAsString,
   width: remAsString,
   background: `#c0c0c0`,
+  border: `${remSize * 20 / 100}rem outset #ECECEC`,
+  overflow: 'none',
+  boxSizing: 'border-box',
+}
+
+const boardCellHighlightedStyle = {
+  height: remAsString,
+  width: remAsString,
+  background: `aqua`,
   border: `${remSize * 20 / 100}rem outset #ECECEC`,
   overflow: 'none',
   boxSizing: 'border-box',
@@ -21,7 +30,7 @@ const boardCellDepressedStyle = {
   boxSizing: 'border-box',
 }
 
-const boardCellCleared = {
+const boardCellClearedStyle = {
   height: remAsString,
   width: remAsString,
   background: `#ECECEC`,
@@ -30,17 +39,33 @@ const boardCellCleared = {
   boxSizing: 'border-box',
 }
 
+const handleClick = (e, xCoor, yCoor, gameBoard) => {
+  // console.log(e.target.getAttribute('cell-coor'))
+}
 
-const GameCellSingle = ({cleared, flagged}) => {
+const GameCellSingle = ({flagged = false, xCoor, yCoor, gameBoard}) => {
+
+  const cell = useMemo(() => gameBoard[yCoor][xCoor], [xCoor, yCoor, gameBoard])
+
+  const cellStyle = useMemo(() =>{
+    switch (cell.style) {
+      case 'base':
+        return boardCellBaseStyle;
+      case 'highlighted' :
+        return boardCellHighlightedStyle
+      case 'mouse-downed':
+        return boardCellDepressedStyle;
+      case 'cleared':
+        return boardCellClearedStyle
+    }
+  },[cell, cell.style])
 
   return (
     <>
-      <h2>Board CELL</h2>
-      <div style={boardCellBaseStyle}>
+      <div className='game-board-cell' cell-coor={`${xCoor}:${yCoor}`} style={cellStyle} onClick={(event) => handleClick(event,xCoor, yCoor, gameBoard)}>
+        {/* {gameBoard[yCoor][xCoor].hasBomb ? '1' : '0'}/{hardCheckCell(xCoor, yCoor, gameBoard)} */}
         <img className='cell-image' src={flagged ? "/images/redFlag.jpg" : ''} alt={flagged ? 'red flag' : ''} />
       </div>
-      <div style={boardCellDepressedStyle}></div>
-      <div style={boardCellCleared}></div>
     </>
   )
 }
