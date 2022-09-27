@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 
 const remSize = 2;
 const remAsString = `${remSize}rem`;
@@ -30,44 +30,60 @@ const boardCellClearedStyle = {
   boxSizing: 'border-box',
 };
 
-function GameCellSingle({ flagged = false, xCoor, yCoor, gameBoard }) {
-  // console.log('gameBoard', gameBoard);
-  if (!gameBoard) console.log('no game board', xCoor, yCoor);
+function GameCellSingle({ xCoor, yCoor, gameBoard }) {
+  const cell = gameBoard[yCoor][xCoor];
 
-  const cell = useMemo(
-    () => gameBoard[yCoor][xCoor],
-    [xCoor, yCoor, gameBoard],
-  );
-
-  const cellStyle = useMemo(() => {
+  const style = (() => {
     switch (cell.style) {
     case 'base':
       return boardCellBaseStyle;
     case 'highlighted':
       return boardCellHighlightedStyle;
     case 'revealed':
-      console.log('style is revealed');
       return boardCellClearedStyle;
     default:
       return boardCellBaseStyle;
     }
-  }, [cell]);
+  })();
+
+  const image = (() => {
+    if (cell.hasBomb) {
+      return '/images/mine1.jpg';
+    }
+    if (cell.isRevealed && cell.hasBomb) {
+      return '/images/mine1.jpg';
+    }
+    if (cell.isFlagged) {
+      return '/images/redFlag.jpg';
+    }
+    if (!cell.isRevealed || cell.adjBombs === 0) {
+      return null;
+    }
+    return null;
+  })();
 
   return (
     <div
       className="game-board-cell"
       cell-coor={`${xCoor}:${yCoor}`}
-      style={cellStyle}
+      style={style}
       role="gridcell"
       tabIndex={0}
+      // onClick={() => console.log(cell.coor.xCoor, cell.coor.yCoor)}
     >
-      {cell.hasBomb ? 'B' : 'N'}
-      {cell.style}
-      <img
-        className="cell-image"
-        src={flagged ? '/images/redFlag.jpg' : ''}
-        alt={flagged ? 'red flag' : ''}
-      />
+      {image
+        ? (
+          <img
+            className="cell-image"
+            src={image}
+            alt="mine"
+          />
+        )
+        : (
+          <p>
+            {cell.adjBombs}
+          </p>
+        )}
     </div>
   );
 }

@@ -32,5 +32,6 @@ module.exports = {
     'no-multiple-empty-lines': ['error', { max: 2 }],
     'arrow-parens': 1,
     'react-hooks/exhaustive-deps': 1,
+    'no-useless-return': 1,
   },
 };

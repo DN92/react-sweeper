@@ -33,28 +33,31 @@ class GameCell {
     this.isFlagged = false;
     this.isRevealed = false;
     this.style = 'base';
-    this.previousStyle = null;
+  }
+
+  setAdjBombCount(gameBoard) {
+    this.adjBombs = getAdjBombCount(this, gameBoard);
   }
 
   setStyle(newStyle) {
     const possibleStyles = ['base', 'highlighted', 'revealed'];
     if (possibleStyles.includes(newStyle.toLowerCase())) {
-      this.previousStyle = this.style;
       this.style = newStyle;
-      return 1;
+      return true;
     }
-    return -1;
+    return false;
   }
 
   setDerivedStyle() {
-    const previous = this.style;
     if (this.isFlagged) {
       this.style = 'base';
       return;
     }
-    if (this.isRevealed) this.setStyle('revealed');
-    if (this.style === 'highlighted') this.style = this.previousStyle;
-    if (this.style !== previous && previous !== 'highlighted') this.previousStyle = previous;
+    if (this.isRevealed) {
+      this.setStyle('revealed');
+      return;
+    }
+    this.setStyle('base');
   }
 }
 
@@ -76,11 +79,18 @@ export const generateGameBoard = (rows, columns, bombs) => {
   }
 
   for (let i = 0; i < bombs; i++) {
-    const [xCoor, yCoor] = gameBoardMemo[Math.floor(Math.random() * gameBoardMemo.length)];
+    const randomIdx = Math.floor(Math.random() * gameBoardMemo.length);
+    const [xCoor, yCoor] = gameBoardMemo[randomIdx];
     gameBoard[xCoor][yCoor].hasBomb = true;
-    gameBoardMemo.splice(i, 1);
+    gameBoardMemo.splice(randomIdx, 1);
   }
 
+  gameBoard.flat()
+    .forEach((cell) => {
+      cell.setAdjBombCount(gameBoard);
+    });
+
+  console.log('gameBoard', gameBoard);
   return gameBoard;
 };
 
@@ -95,7 +105,6 @@ export const resetStylesOfBoard = (gameBoard) => {
 export const getAdjCells = (gameCell, gameBoard) => {
   if (!gameBoard) throw new Error('no gameBoard argument provided to getAdjCells');
   if (!(gameCell instanceof GameCell)) {
-    // console.log('gameCell is not a gameCell, return empty array')
     return [];
   }
   const { xCoor, yCoor } = gameCell.coor;
@@ -120,11 +129,10 @@ export const getAdjCells = (gameCell, gameBoard) => {
 
 export const hardCheckCell = (xCoor, yCoor, gameBoard, checkedCells = []) => {
   const cell = gameBoard[yCoor][xCoor];
+  const { x, y } = cell.coor;
   let counter = 0;
 
-  const adjCells = getAdjCells(xCoor, yCoor, gameBoard);
-
-  // console.log('cell', cell)   // delete me
+  const adjCells = getAdjCells(cell, gameBoard);
 
   // if cell has a flag on it, do nothing
   if (cell.isFlagged) {
@@ -139,13 +147,13 @@ export const hardCheckCell = (xCoor, yCoor, gameBoard, checkedCells = []) => {
   // if it's not yet been clicked on, get its surrounding bomb count
   if (!cell.isRevealed) {
     cell.isRevealed = true;
-    adjCells.forEach(([y, x]) => {
+    adjCells.forEach((cell) => {
       if (!gameBoard[y] || !gameBoard[y][x]) return;
       if (gameBoard[y][x].hasBomb) counter++;
     });
     cell.adjBombs = counter;
     if (counter === 0) {
-      adjCells.forEach(([y, x]) => {
+      adjCells.forEach((cell) => {
         if (
           !gameBoard[y]
           || !gameBoard[y][x]
@@ -158,12 +166,12 @@ export const hardCheckCell = (xCoor, yCoor, gameBoard, checkedCells = []) => {
     //  if cell has already been opened and this is a follow up click
   } else if (cell.isRevealed) {
     const adjFlags = getAdjFlagCount(xCoor, yCoor, gameBoard);
-    // console.log('getting adj flag count: ', adjFlags)
 
     // if flag count equals bomb count, open adj squares
     if (adjFlags === counter) {
       const resultsOfAdjCheck = [];
-      adjCells.forEach(([y, x]) => {
+      adjCells.forEach((cell) => {
+        const { x, y } = cell.coor;
         if (
           !gameBoard[y]
           || !gameBoard[y][x]
@@ -182,11 +190,20 @@ export const hardCheckCell = (xCoor, yCoor, gameBoard, checkedCells = []) => {
 export const getAdjFlagCount = (xCoor, yCoor, gameBoard) => {
   let counter = 0;
 
-  getAdjCells(xCoor, yCoor, gameBoard).forEach(([x, y]) => {
+  getAdjCells(gameBoard[yCoor][xCoor], gameBoard).forEach((cell) => {
+    const { x, y } = cell.coor;
     if (!gameBoard[y] || !gameBoard[y][x]) return;
     if (gameBoard[y][x].isFlagged) counter++;
   });
 
+  return counter;
+};
+
+export const getAdjBombCount = (cell, gameBoard) => {
+  let counter = 0;
+  getAdjCells(cell, gameBoard).forEach((cell) => {
+    if (cell.hasBomb) counter++;
+  });
   return counter;
 };
 

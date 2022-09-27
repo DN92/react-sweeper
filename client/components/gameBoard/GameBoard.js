@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef, useReducer } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import GameBoardRow from './GameBoardRow';
 import useRerender from '../../hooks/useRerender';
 import { hardCheckCell, getAdjCells, resetStylesOfBoard } from '../gameContainer/gameStatePresets';
@@ -27,11 +27,8 @@ function GameBoard({ rows = 5, columns = 10, gameBoard, dispatchGameStatus }) {
     if (!cellCoors) return;
     const [x, y] = cellCoors.split(':');
     const result = hardCheckCell(x, y, gameBoard);
-    console.log('hard checked ', x, y);
     if (result === -1) {
       dispatchGameStatus({ type: 'lost' });
-      setCurrentCell((prev) => ({ ...prev, isRevealed: true, style: 'cleared' }));
-      rerender();
     }
   };
 
@@ -41,14 +38,13 @@ function GameBoard({ rows = 5, columns = 10, gameBoard, dispatchGameStatus }) {
   };
 
   useEffect(() => {
-    console.log('current cell', currentCell?.coor?.xCoor, currentCell?.coor?.yCoor);
     resetStylesOfBoard(gameBoard);
     if (currentCell && enableHighlighting) {
       const adjCells = getAdjCells(currentCell, gameBoard);
       adjCells.forEach((cell) => { cell.setStyle('highlighted'); });
     }
     rerender();
-  }, [currentCell, enableHighlighting, gameBoard]);
+  }, [currentCell, enableHighlighting, gameBoard, rerender]);
 
   return (
     <div

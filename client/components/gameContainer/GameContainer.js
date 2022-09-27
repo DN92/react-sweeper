@@ -10,8 +10,6 @@ const WON = 'won';
 const LOST = 'lost';
 
 function GameContainer() {
-  console.log('rerendered game container');
-
   const [gameStatus, dispatchGameStatus] = useReducer((state, action) => {
     switch (action.type) {
     case 'init':
@@ -42,7 +40,6 @@ function GameContainer() {
       <GameMenu gameStatus={gameStatus} />
       <GameBoard
         gameBoard={gameBoard}
-        setGameBoard={setGameBoard}
         dispatchGameStatus={dispatchGameStatus}
       />
       <hr />
