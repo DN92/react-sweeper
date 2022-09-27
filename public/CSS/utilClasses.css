@@ -12,8 +12,8 @@
   border: 0;
 }
 
-.required::after{
-  content: " *";
+.required::after {
+  content: ' *';
   color: red;
 }
 
@@ -30,19 +30,16 @@
 }
 
 .red {
-  color: red !important
+  color: red !important;
 }
 
 .margin-right-halfRem {
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 }
 
 .box-shadow1 {
   box-shadow: rgb(0 0 0 / 4%) 0px 0.4px 0.5px -9px,
-    rgb(0 0 0 / 6%) 0px 0.9px 1.1px -9px,
-    rgb(0 0 0 / 7%) 0px 1.8px 2.1px -9px,
-    rgb(0 0 0 / 8%) 0px 3.1px 3.8px -9px,
-    rgb(0 0 0 / 10%) 0px 5.8px 7.1px -9px,
-    rgb(0 0 0 / 14%) 0px 14px 17px -9px,
-    rgb(0 0 0 / 5%) 0px 0px 15px;
+    rgb(0 0 0 / 6%) 0px 0.9px 1.1px -9px, rgb(0 0 0 / 7%) 0px 1.8px 2.1px -9px,
+    rgb(0 0 0 / 8%) 0px 3.1px 3.8px -9px, rgb(0 0 0 / 10%) 0px 5.8px 7.1px -9px,
+    rgb(0 0 0 / 14%) 0px 14px 17px -9px, rgb(0 0 0 / 5%) 0px 0px 15px;
 }

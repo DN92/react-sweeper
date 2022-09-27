@@ -1,10 +1,12 @@
-import React from 'react'
-import GameContainer from './gameContainer/GameContainer'
+import React from 'react';
+import GameContainer from './gameContainer/GameContainer';
 
-const Home = () => (
-  <div>
-    <GameContainer />
-  </div>
-)
+function Home() {
+  return (
+    <div>
+      <GameContainer />
+    </div>
+  );
+}
 
-export default Home
+export default Home;

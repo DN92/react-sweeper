@@ -1,13 +1,12 @@
-import React from 'react'
+import React from 'react';
 
-const GameMenu = ({gameStatus}) => {
-
+function GameMenu({ gameStatus }) {
   return (
     <div>
-      GAME MENU
-      game status is {gameStatus}
+      GAME MENU game status is
+      {gameStatus}
     </div>
-  )
+  );
 }
 
-export default GameMenu
+export default GameMenu;

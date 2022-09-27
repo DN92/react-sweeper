@@ -1,81 +1,77 @@
-import React, {useState, useEffect, useMemo, useRef, useReducer} from 'react'
-import GameBoardRow from './GameBoardRow'
-import { hardCheckCell, getAdjCells, getAdjCellsCoor  } from '../gameContainer/gameStatePresets'
+import React, { useState, useEffect, useMemo, useRef, useReducer } from 'react';
+import GameBoardRow from './GameBoardRow';
+import useRerender from '../../hooks/useRerender';
+import { hardCheckCell, getAdjCells, resetStylesOfBoard } from '../gameContainer/gameStatePresets';
 
-const GameBoard = ({rows = 5, columns = 10, gameBoard, setGameBoard, dispatchGameStatus}) => {
-
-  const [rerender, setRerender] = useState(0)
-  const currentCell = useRef(null)
-  const [highlightAdjCells, setHighlightAdjCells] = useState(true)
-  const [savedStyles, dispatchSavedStyles] = useReducer((state, action) => {
-    switch(action.type) {
-      case 'set':
-        return action.payload
-      case 'clear':
-        return [];
-      default:
-        return [...state]
-    }
-  }, [])
-
-  const gameColumn = useMemo(() => (
-    new Array(rows).fill(1)
-  ), [rows])
+function GameBoard({ rows = 5, columns = 10, gameBoard, dispatchGameStatus }) {
+  const rerender = useRerender();
+  const [currentCell, setCurrentCell] = useState({});
+  const [enableHighlighting, setEnableHighlighting] = useState(false);
+  const gameColumn = useMemo(() => new Array(rows).fill(1), [rows]);
 
   const handleMouseOver = (e) => {
-    if(e.target.getAttribute('cell-coor')) {
-      const [x, y] = e.target.getAttribute('cell-coor').split(':')
-      currentCell.previous = currentCell.current
-      currentCell.current = gameBoard[y][x]
-      if(currentCell.previous !== currentCell.current) setRerender(prev => prev + 1)
-      console.log(currentCell.current, 'current cell')
+    if (e.target.getAttribute('cell-coor')) {
+      const [x, y] = e.target.getAttribute('cell-coor').split(':');
+      setCurrentCell(gameBoard[y][x]);
     }
-  }
+  };
 
   const handleMouseDown = (e) => {
-    const cellCoors = e.target.getAttribute('cell-coor')
-    if(!cellCoors) return
-    const [x, y] = currentCell.current
-    const adjCells = getAdjCells(x, y, gameBoard)
-    dispatchSavedStyles({
-      type: 'set',
-      payload: adjCells.filter(cell => !cell.isFlagged && !cell.isRevealed)
-        .map(cell => cell.style)
-    })
-  }
+    e.preventDefault();
+    setEnableHighlighting(true);
+  };
 
   const handleMouseUp = (e) => {
-    const cellCoors = e.target.getAttribute('cell-coor')
-    if(!cellCoors) return
-    const [x, y] = cellCoors.split(':')
-    const cell = gameBoard[y][x]
-    const result = hardCheckCell(x, y, gameBoard)
-    if(result === -1) {
-      dispatchGameStatus({type: 'lost'})
+    setEnableHighlighting(false);
+    const cellCoors = e.target.getAttribute('cell-coor');
+    if (!cellCoors) return;
+    const [x, y] = cellCoors.split(':');
+    const result = hardCheckCell(x, y, gameBoard);
+    console.log('hard checked ', x, y);
+    if (result === -1) {
+      dispatchGameStatus({ type: 'lost' });
+      setCurrentCell((prev) => ({ ...prev, isRevealed: true, style: 'cleared' }));
+      rerender();
     }
-  }
+  };
+
+  const handleMouseLeave = () => {
+    setEnableHighlighting(false);
+    setCurrentCell(null);
+  };
 
   useEffect(() => {
-    // if(currentCell.previous) {
-      console.log('currentcell previous', currentCell.previous)
-      const prevAdj = getAdjCells(currentCell.previous, gameBoard)
-      console.log(prevAdj, 'prev adj')
-
-
-
-      /// TRACK STYLING
-
-    // }
-  }, [currentCell.current,currentCell, highlightAdjCells])
+    console.log('current cell', currentCell?.coor?.xCoor, currentCell?.coor?.yCoor);
+    resetStylesOfBoard(gameBoard);
+    if (currentCell && enableHighlighting) {
+      const adjCells = getAdjCells(currentCell, gameBoard);
+      adjCells.forEach((cell) => { cell.setStyle('highlighted'); });
+    }
+    rerender();
+  }, [currentCell, enableHighlighting, gameBoard]);
 
   return (
-    <div className='game-board' onMouseUp={(e)=>handleMouseUp(e)} onMouseDown={(e) => handleMouseDown(e)} onMouseOver={(e) => handleMouseOver(e)} >
+    <div
+      role="button"
+      className="game-board"
+      onMouseUp={(e) => handleMouseUp(e)}
+      onMouseLeave={handleMouseLeave}
+      onMouseDown={(e) => handleMouseDown(e)}
+      onMouseOver={(e) => handleMouseOver(e)}
+      onFocus={(e) => handleMouseOver(e)}
+      tabIndex={0}
+      draggable={false}
+    >
       {gameColumn.map((row, idx) => (
-        <GameBoardRow key={row + ':' + idx} columns={columns} yCoor={idx} gameBoard={gameBoard} />
+        <GameBoardRow
+          key={`${row}:${idx}`}
+          columns={columns}
+          yCoor={idx}
+          gameBoard={gameBoard}
+        />
       ))}
-
     </div>
-  )
+  );
 }
 
-export default GameBoard
+export default GameBoard;

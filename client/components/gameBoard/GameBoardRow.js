@@ -1,20 +1,21 @@
-import React, {useState, useEffect, useMemo} from 'react'
-import GameCellSingle from './GameCellSingle'
+import React, { useMemo } from 'react';
+import GameCellSingle from './GameCellSingle';
 
-const GameBoardRow = ({columns = 10, yCoor, gameBoard}) => {
-
-  const boardRow = useMemo(() => (
-    new Array(columns).fill(1)
-    ), [columns])
+function GameBoardRow({ columns = 10, yCoor, gameBoard }) {
+  const boardRow = useMemo(() => new Array(columns).fill(1), [columns]);
 
   return (
-    <div className='game-board-row'>
+    <div className="game-board-row">
       {boardRow.map((cell, idx) => (
-        <GameCellSingle key={cell + '.' + idx} xCoor={idx} yCoor={yCoor} gameBoard={gameBoard} />
+        <GameCellSingle
+          key={`${cell}.${idx}`}
+          xCoor={idx}
+          yCoor={yCoor}
+          gameBoard={gameBoard}
+        />
       ))}
-
     </div>
-  )
+  );
 }
 
-export default GameBoardRow
+export default GameBoardRow;

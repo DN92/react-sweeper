@@ -1,10 +1,7 @@
-const MainNav = () => {
+import React from 'react';
 
-  return (
-    <div>
-      NAVBAR PLACEHOLDER
-    </div>
-  )
+function MainNav() {
+  return (<div>NAVBAR PLACEHOLDER</div>);
 }
 
-export default MainNav
+export default MainNav;

@@ -1,10 +1,8 @@
-import React from 'react'
-import { BrowserRouter } from 'react-router-dom'
-import FrontEndRoutes from '../FrontEndRoutes'
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import FrontEndRoutes from '../FrontEndRoutes';
 
-
-const App = () => {
-
+function App() {
   return (
     <BrowserRouter>
       <div id="App">
@@ -12,7 +10,7 @@ const App = () => {
         <FrontEndRoutes />
       </div>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
