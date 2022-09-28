@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React from 'react';
 
 const remSize = 2;
 const remAsString = `${remSize}rem`;
@@ -16,7 +16,7 @@ const boardCellHighlightedStyle = {
   height: remAsString,
   width: remAsString,
   background: 'aqua',
-  border: `${(remSize * 20) / 100}rem outset #ECECEC`,
+  border: `${(remSize * 20) / 100}rem outset aqua`,
   overflow: 'none',
   boxSizing: 'border-box',
 };
@@ -31,20 +31,7 @@ const boardCellClearedStyle = {
 };
 
 function GameCellSingle({ xCoor, yCoor, gameBoard }) {
-  const cell = gameBoard[yCoor][xCoor];
-
-  const style = (() => {
-    switch (cell.style) {
-    case 'base':
-      return boardCellBaseStyle;
-    case 'highlighted':
-      return boardCellHighlightedStyle;
-    case 'revealed':
-      return boardCellClearedStyle;
-    default:
-      return boardCellBaseStyle;
-    }
-  })();
+  const cell = gameBoard.board[yCoor][xCoor];
 
   const image = (() => {
     if (cell.hasBomb) {
@@ -61,6 +48,19 @@ function GameCellSingle({ xCoor, yCoor, gameBoard }) {
     }
     return null;
   })();
+  const style = (() => {
+    switch (cell.style) {
+    case 'base':
+      return boardCellBaseStyle;
+    case 'highlighted':
+      return boardCellHighlightedStyle;
+    case 'revealed':
+      return boardCellClearedStyle;
+    default:
+      return boardCellBaseStyle;
+    }
+  })();
+
 
   return (
     <div
@@ -69,18 +69,19 @@ function GameCellSingle({ xCoor, yCoor, gameBoard }) {
       style={style}
       role="gridcell"
       tabIndex={0}
-      // onClick={() => console.log(cell.coor.xCoor, cell.coor.yCoor)}
     >
       {image
         ? (
           <img
-            className="cell-image"
+            cell-coor={`${xCoor}:${yCoor}`}
             src={image}
-            alt="mine"
+            alt=""
           />
         )
         : (
-          <p>
+          <p
+            cell-coor={`${xCoor}:${yCoor}`}
+          >
             {cell.adjBombs}
           </p>
         )}

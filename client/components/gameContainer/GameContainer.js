@@ -1,8 +1,8 @@
-import React, { useRef, useState, useReducer } from 'react';
-import gameStatePresets, { generateGameBoard } from './gameStatePresets';
-import GameBoard from '../gameBoard/GameBoard';
+import React, { useMemo, useRef, useState, useReducer, useEffect } from 'react';
+import gameStatePresets from './gameStatePresets';
+import GameBoardComponent from '../gameBoard/GameBoardComponent';
+import GameBoard from './GameBoard';
 import GameMenu from './GameMenu';
-import GameCellSingle from '../gameBoard/GameCellSingle';
 
 const INIT = 'init';
 const RUNNING = 'running';
@@ -27,27 +27,22 @@ function GameContainer() {
 
   const nextGameState = useRef(gameStatePresets.small);
   const [gameSettings, setGameSetting] = useState(nextGameState.current);
-  const [gameBoard, setGameBoard] = useState(
-    generateGameBoard(
+  const gameBoard = useMemo(() => {
+    return new GameBoard(
       gameSettings.size.rows,
       gameSettings.size.columns,
       gameSettings.bombs,
-    ),
-  );
+    );
+  }, [gameSettings]);
 
   return (
     <>
       <GameMenu gameStatus={gameStatus} />
-      <GameBoard
+      <GameBoardComponent
         gameBoard={gameBoard}
         dispatchGameStatus={dispatchGameStatus}
       />
       <hr />
-      {/* <GameCellSingle
-        gameBoard={gameBoard}
-        xCoor={2}
-        yCoor={2}
-      /> */}
     </>
   );
 }

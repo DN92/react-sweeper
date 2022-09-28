@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import GameBoardRow from './GameBoardRow';
 import useRerender from '../../hooks/useRerender';
-import { hardCheckCell, getAdjCells, resetStylesOfBoard } from '../gameContainer/gameStatePresets';
 
-function GameBoard({ rows = 5, columns = 10, gameBoard, dispatchGameStatus }) {
+function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameStatus }) {
   const rerender = useRerender();
   const [currentCell, setCurrentCell] = useState({});
   const [enableHighlighting, setEnableHighlighting] = useState(false);
@@ -12,7 +11,7 @@ function GameBoard({ rows = 5, columns = 10, gameBoard, dispatchGameStatus }) {
   const handleMouseOver = (e) => {
     if (e.target.getAttribute('cell-coor')) {
       const [x, y] = e.target.getAttribute('cell-coor').split(':');
-      setCurrentCell(gameBoard[y][x]);
+      setCurrentCell(gameBoard.board[y][x]);
     }
   };
 
@@ -23,11 +22,9 @@ function GameBoard({ rows = 5, columns = 10, gameBoard, dispatchGameStatus }) {
 
   const handleMouseUp = (e) => {
     setEnableHighlighting(false);
-    const cellCoors = e.target.getAttribute('cell-coor');
-    if (!cellCoors) return;
-    const [x, y] = cellCoors.split(':');
-    const result = hardCheckCell(x, y, gameBoard);
-    if (result === -1) {
+    const [x, y] = e.target.getAttribute('cell-coor').split(':');
+    if (!(x && y)) return;
+    if (!gameBoard.hardCheckCell(gameBoard.board[y][x])) {
       dispatchGameStatus({ type: 'lost' });
     }
   };
@@ -38,9 +35,9 @@ function GameBoard({ rows = 5, columns = 10, gameBoard, dispatchGameStatus }) {
   };
 
   useEffect(() => {
-    resetStylesOfBoard(gameBoard);
+    gameBoard.resetStylesOfBoard();
     if (currentCell && enableHighlighting) {
-      const adjCells = getAdjCells(currentCell, gameBoard);
+      const adjCells = gameBoard.getAdjCells(currentCell);
       adjCells.forEach((cell) => { cell.setStyle('highlighted'); });
     }
     rerender();
@@ -70,4 +67,4 @@ function GameBoard({ rows = 5, columns = 10, gameBoard, dispatchGameStatus }) {
   );
 }
 
-export default GameBoard;
+export default GameBoardComponent;
