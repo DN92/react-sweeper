@@ -1,11 +1,11 @@
 import { useState, useCallback } from 'react';
 
 const useRerender = () => {
-  const [forceRender, setForceRender] = useState(0);
+  const [, setCounter] = useState(0);
 
   const rerender = useCallback(() => {
-    setForceRender((prev) => prev + 1);
-  }, [setForceRender]);
+    setCounter((prev) => prev + 1);
+  }, [setCounter]);
 
   return rerender;
 };

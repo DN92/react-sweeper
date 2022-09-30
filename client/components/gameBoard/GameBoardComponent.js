@@ -11,13 +11,13 @@ function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameSta
   const handleMouseOver = (e) => {
     if (e.target.getAttribute('cell-coor')) {
       const [x, y] = e.target.getAttribute('cell-coor').split(':');
-      setCurrentCell(gameBoard.board[y][x]);
+      setCurrentCell(gameBoard.getCell(x, y));
     }
   };
 
   const handleMouseDown = (e) => {
     e.preventDefault();
-    if (e.button === 0) {
+    if (e.button === 0 && currentCell.isRevealed) {
       setEnableHighlighting(true);
     }
     if (e.button === 2) {
@@ -25,7 +25,6 @@ function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameSta
       if (!coords) return;
       const [x, y] = coords.split(':');
       gameBoard.getCell(x, y).toggleFlagged();
-      rerender();
     }
   };
 
@@ -36,10 +35,11 @@ function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameSta
       if (!coords) return;
       const [x, y] = e.target.getAttribute('cell-coor').split(':');
       if (!(x || y)) return;
-      if (!gameBoard.hardCheckCell(gameBoard.getCell(x, y))) {
+      if (gameBoard.hardCheckCell(gameBoard.getCell(x, y)) === -1) {
         dispatchGameStatus({ type: 'lost' });
       }
     }
+    setCurrentCell({ ...currentCell });
   };
 
   const handleRightClick = (e) => {
@@ -48,7 +48,7 @@ function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameSta
 
   const handleMouseLeave = () => {
     setEnableHighlighting(false);
-    setCurrentCell(null);
+    rerender();
   };
 
   useEffect(() => {

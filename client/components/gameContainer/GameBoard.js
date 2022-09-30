@@ -103,6 +103,7 @@ class GameBoard {
 
     //  if there is a bomb on this cell, return -1
     if (gameCell.hasBomb) {
+      console.log('bomb');
       return -1;
     }
 

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 const remSize = 2;
 const remAsString = `${remSize}rem`;
@@ -32,15 +32,17 @@ const boardCellClearedStyle = {
 
 function GameCellSingle({ xCoor, yCoor, gameBoard }) {
   // const cell = gameBoard.getCell(xCoor, yCoor);
-  const cell = useMemo(
-    () => gameBoard.getCell(xCoor, yCoor),
-    [xCoor, yCoor, gameBoard],
-  );
+  // const cell = useMemo(
+  //   () => gameBoard.getCell(xCoor, yCoor),
+  //   [xCoor, yCoor, gameBoard],
+  // );
+
+  const cell = gameBoard.getCell(xCoor, yCoor);
 
   const image = (() => {
-    if (cell.hasBomb) {
-      return '/images/mine1.jpg';
-    }
+    // if (cell.hasBomb) {
+    //   return '/images/mine1.jpg';
+    // }
     if (cell.isRevealed && cell.hasBomb) {
       return '/images/mine1.jpg';
     }
@@ -87,7 +89,7 @@ function GameCellSingle({ xCoor, yCoor, gameBoard }) {
           <p
             cell-coor={`${xCoor}:${yCoor}`}
           >
-            {cell.adjBombs}
+            {cell.isRevealed ? cell.adjBombs : ''}
           </p>
         )}
     </div>
