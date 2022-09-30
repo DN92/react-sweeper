@@ -16,7 +16,7 @@ const boardCellHighlightedStyle = {
   height: remAsString,
   width: remAsString,
   background: 'aqua',
-  border: `${(remSize * 20) / 100}rem outset aqua`,
+  border: `${(remSize * 8) / 100}rem outset aqua`,
   overflow: 'none',
   boxSizing: 'border-box',
 };
@@ -31,18 +31,9 @@ const boardCellClearedStyle = {
 };
 
 function GameCellSingle({ xCoor, yCoor, gameBoard }) {
-  // const cell = gameBoard.getCell(xCoor, yCoor);
-  // const cell = useMemo(
-  //   () => gameBoard.getCell(xCoor, yCoor),
-  //   [xCoor, yCoor, gameBoard],
-  // );
-
   const cell = gameBoard.getCell(xCoor, yCoor);
 
   const image = (() => {
-    // if (cell.hasBomb) {
-    //   return '/images/mine1.jpg';
-    // }
     if (cell.isRevealed && cell.hasBomb) {
       return '/images/mine1.jpg';
     }
@@ -60,11 +51,34 @@ function GameCellSingle({ xCoor, yCoor, gameBoard }) {
     case 'base':
       return boardCellBaseStyle;
     case 'highlighted':
-      return boardCellHighlightedStyle;
+      // return boardCellHighlightedStyle;
+      return boardCellClearedStyle;
     case 'revealed':
       return boardCellClearedStyle;
     default:
       return boardCellBaseStyle;
+    }
+  })();
+  const color = (() => {
+    switch (cell.adjBombs) {
+    case 1:
+      return 'blue';
+    case 2:
+      return 'green';
+    case 3:
+      return 'red';
+    case 4:
+      return 'purple';
+    case 5:
+      return 'maroon';
+    case 6:
+      return 'turquoise';
+    case 7:
+      return 'orange';
+    case 8:
+      return 'black';
+    default:
+      return '';
     }
   })();
 
@@ -87,6 +101,8 @@ function GameCellSingle({ xCoor, yCoor, gameBoard }) {
         )
         : (
           <p
+            className="game-board-cell-text"
+            style={{ color }}
             cell-coor={`${xCoor}:${yCoor}`}
           >
             {cell.isRevealed && cell.adjBombs > 0 ? cell.adjBombs : ''}

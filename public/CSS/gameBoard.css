@@ -4,3 +4,11 @@
 .game-board-row {
   display: flex;
 }
+
+.game-board-cell-text {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+  color: red
+}

@@ -48,11 +48,12 @@ class GameBoard {
   }
 
   getCell(xCoor, yCoor) {
+    // console.log(this);
     return this.board[yCoor][xCoor];
   }
 
-  remake(xCoor, yCoor) {
-    const cell = this.getCell(xCoor, yCoor);
+  remakeCell(cell) {
+    const { yCoor, xCoor } = cell.coor;
     this.board[yCoor][xCoor] = new GameCell(null, null, { ...cell });
   }
 

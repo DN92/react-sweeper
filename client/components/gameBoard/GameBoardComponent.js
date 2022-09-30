@@ -8,6 +8,19 @@ function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameSta
   const [enableHighlighting, setEnableHighlighting] = useState(false);
   const gameColumn = useMemo(() => new Array(rows).fill(1), [rows]);
 
+  const [cellLeftClicked, setCellLeftClicked] = useState(false);
+  const [cellRightClicked, setCellRightClicked] = useState(false);
+
+  const clickHandler = (e) => {
+    if (e.button === 0) setCellLeftClicked(true);
+    if (e.button === 2) setCellRightClicked(true);
+  };
+
+  const clickReset = () => {
+    setCellLeftClicked(false);
+    setCellRightClicked(false);
+  };
+
   const handleMouseOver = (e) => {
     if (e.target.getAttribute('cell-coor')) {
       const [x, y] = e.target.getAttribute('cell-coor').split(':');
@@ -17,30 +30,25 @@ function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameSta
 
   const handleMouseDown = (e) => {
     e.preventDefault();
-    if (e.button === 0 && currentCell.isRevealed) {
-      setEnableHighlighting(true);
-    }
-    if (e.button === 2) {
-      const coords = e.target.getAttribute('cell-coor');
-      if (!coords) return;
-      const [x, y] = coords.split(':');
-      gameBoard.getCell(x, y).toggleFlagged();
+    clickHandler(e);
+    if (e.button === 2 && !currentCell.isRevealed) {
+      currentCell?.toggleFlagged();
+      rerender();
     }
   };
 
   const handleMouseUp = (e) => {
+    clickReset();
     setEnableHighlighting(false);
-    if (e.button === 0) {
-      const coords = e.target.getAttribute('cell-coor');
-      if (!coords) return;
-      const [x, y] = e.target.getAttribute('cell-coor').split(':');
-      if (!(x || y)) return;
-      if (gameBoard.hardCheckCell(gameBoard.getCell(x, y)) === -1) {
+    if (e.button === 0 && currentCell) {
+      if (gameBoard.hardCheckCell(currentCell) === -1) {
         dispatchGameStatus({ type: 'lost' });
       }
-      setCurrentCell(gameBoard.remake(x, y));
+      const { xCoor, yCoor } = currentCell.coor;
+      gameBoard.remakeCell(currentCell);
+
+      setCurrentCell(gameBoard.getCell(xCoor, yCoor));
     }
-    // setCurrentCell({ ...currentCell });
   };
 
   const handleRightClick = (e) => {
@@ -51,6 +59,18 @@ function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameSta
     setEnableHighlighting(false);
     rerender();
   };
+
+  useEffect(() => {
+    setCellLeftClicked(false);
+    setCellRightClicked(false);
+    if (!currentCell?.isRevealed) setEnableHighlighting(false);
+  }, [currentCell]);
+
+  useEffect(() => {
+    if (cellLeftClicked && cellRightClicked && currentCell?.isRevealed) {
+      setEnableHighlighting(true);
+    }
+  }, [cellLeftClicked, cellRightClicked, currentCell]);
 
   useEffect(() => {
     gameBoard.resetStylesOfBoard();
