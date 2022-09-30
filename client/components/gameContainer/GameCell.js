@@ -19,6 +19,14 @@ class GameCell {
     this.adjBombs = bombs;
   }
 
+  setIsFlagged(bool) {
+    this.isFlagged = bool;
+  }
+
+  toggleFlagged() {
+    this.isFlagged = !this.isFlagged;
+  }
+
   setStyle(newStyle) {
     const possibleStyles = ['base', 'highlighted', 'revealed'];
     if (possibleStyles.includes(newStyle.toLowerCase())) {

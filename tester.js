@@ -1,19 +1,5 @@
-function invertCase(text) {
-  const LOWER_CASE = 'abcdefghijklmnopqrstuvwxyz';
-  const UPPER_CASE = 'ABCDFFGHIJKLMNOPQRSTUVWXYZ';
+const values = '23 x23 5c2 s50'.split(/[^\d]+/g);
+const d1 = values.map(parseInt);
+const d2 = values.map((v) => parseInt(v));
 
-  let tempString = '';
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    if (LOWER_CASE.indexOf(char) !== -1) { // is lowercase
-      const upper = UPPER_CASE[LOWER_CASE.indexOf(char)];
-      tempString += upper;
-    } else { // is uppercase
-      const lower = LOWER_CASE[UPPER_CASE.indexOf(char)];
-      tempString += lower;
-    }
-  }
-  return tempString;
-}
-
-console.log(invertCase('YoLo'));
+console.log(parseInt('x23', 10));

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 const remSize = 2;
 const remAsString = `${remSize}rem`;
@@ -31,7 +31,11 @@ const boardCellClearedStyle = {
 };
 
 function GameCellSingle({ xCoor, yCoor, gameBoard }) {
-  const cell = gameBoard.board[yCoor][xCoor];
+  // const cell = gameBoard.getCell(xCoor, yCoor);
+  const cell = useMemo(
+    () => gameBoard.getCell(xCoor, yCoor),
+    [xCoor, yCoor, gameBoard],
+  );
 
   const image = (() => {
     if (cell.hasBomb) {
@@ -48,6 +52,7 @@ function GameCellSingle({ xCoor, yCoor, gameBoard }) {
     }
     return null;
   })();
+
   const style = (() => {
     switch (cell.style) {
     case 'base':

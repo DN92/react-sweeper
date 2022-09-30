@@ -47,6 +47,10 @@ class GameBoard {
     });
   }
 
+  getCell(xCoor, yCoor) {
+    return this.board[yCoor][xCoor];
+  }
+
   getAdjCells(gameCell) {
     if (!(gameCell instanceof GameCell)) {
       return [];
@@ -89,6 +93,7 @@ class GameBoard {
   }
 
   hardCheckCell = (gameCell, checkedCells = []) => {
+    // console.log('hard checking gameCell.coor', gameCell.coor.xCoor, gameCell.coor.yCoor);
     const adjCells = this.getAdjCells(gameCell);
 
     // if cell has a flag on it, do nothing
@@ -115,12 +120,13 @@ class GameBoard {
       const adjFlags = this.getAdjFlagCount(gameCell);
 
       // if flag count equals bomb count, open adj squares
-      if (adjFlags === gameCell.adjBombs) {
+      if (adjFlags === gameCell.adjBombs && adjFlags !== 0) {
+        adjCells.forEach((cell) => console.log('adj Cell', cell.coor.xCoor, cell.coor.yCoor));
         const resultsOfAdjCheck = [];
         adjCells.forEach((cell) => {
           if (checkedCells.some((ele) => ele === cell)) return;
           checkedCells.push(cell);
-          resultsOfAdjCheck.push(this.hardCheckCell(gameCell, checkedCells));
+          resultsOfAdjCheck.push(this.hardCheckCell(cell, checkedCells));
         });
         if (resultsOfAdjCheck.includes(-1)) return -1;
       }

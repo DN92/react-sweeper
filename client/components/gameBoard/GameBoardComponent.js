@@ -17,16 +17,33 @@ function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameSta
 
   const handleMouseDown = (e) => {
     e.preventDefault();
-    setEnableHighlighting(true);
+    if (e.button === 0) {
+      setEnableHighlighting(true);
+    }
+    if (e.button === 2) {
+      const coords = e.target.getAttribute('cell-coor');
+      if (!coords) return;
+      const [x, y] = coords.split(':');
+      gameBoard.getCell(x, y).toggleFlagged();
+      rerender();
+    }
   };
 
   const handleMouseUp = (e) => {
     setEnableHighlighting(false);
-    const [x, y] = e.target.getAttribute('cell-coor').split(':');
-    if (!(x && y)) return;
-    if (!gameBoard.hardCheckCell(gameBoard.board[y][x])) {
-      dispatchGameStatus({ type: 'lost' });
+    if (e.button === 0) {
+      const coords = e.target.getAttribute('cell-coor');
+      if (!coords) return;
+      const [x, y] = e.target.getAttribute('cell-coor').split(':');
+      if (!(x || y)) return;
+      if (!gameBoard.hardCheckCell(gameBoard.getCell(x, y))) {
+        dispatchGameStatus({ type: 'lost' });
+      }
     }
+  };
+
+  const handleRightClick = (e) => {
+    e.preventDefault();
   };
 
   const handleMouseLeave = () => {
@@ -48,6 +65,7 @@ function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameSta
       role="button"
       className="game-board"
       onMouseUp={(e) => handleMouseUp(e)}
+      onContextMenu={handleRightClick}
       onMouseLeave={handleMouseLeave}
       onMouseDown={(e) => handleMouseDown(e)}
       onMouseOver={(e) => handleMouseOver(e)}
