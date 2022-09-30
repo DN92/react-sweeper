@@ -38,8 +38,9 @@ function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameSta
       if (gameBoard.hardCheckCell(gameBoard.getCell(x, y)) === -1) {
         dispatchGameStatus({ type: 'lost' });
       }
+      setCurrentCell(gameBoard.remake(x, y));
     }
-    setCurrentCell({ ...currentCell });
+    // setCurrentCell({ ...currentCell });
   };
 
   const handleRightClick = (e) => {

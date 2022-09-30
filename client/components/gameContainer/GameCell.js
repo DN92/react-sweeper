@@ -1,14 +1,15 @@
 class GameCell {
-  constructor(x, y) {
-    this.coor = {
+  constructor(x, y, oldCell) {
+    this.coor = oldCell?.coor
+    || {
       xCoor: x,
       yCoor: y,
     };
-    this.adjBombs = null;
-    this.hasBomb = false;
-    this.isFlagged = false;
-    this.isRevealed = false;
-    this.style = 'base';
+    this.adjBombs = oldCell?.adjBombs || null;
+    this.hasBomb = oldCell?.hasBomb || false;
+    this.isFlagged = oldCell?.isFlagged || false;
+    this.isRevealed = oldCell?.isRevealed || false;
+    this.style = oldCell?.style || 'base';
   }
 
   setIsRevealed(bool) {

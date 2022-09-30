@@ -51,6 +51,11 @@ class GameBoard {
     return this.board[yCoor][xCoor];
   }
 
+  remake(xCoor, yCoor) {
+    const cell = this.getCell(xCoor, yCoor);
+    this.board[yCoor][xCoor] = new GameCell(null, null, { ...cell });
+  }
+
   getAdjCells(gameCell) {
     if (!(gameCell instanceof GameCell)) {
       return [];
@@ -93,7 +98,6 @@ class GameBoard {
   }
 
   hardCheckCell = (gameCell, checkedCells = []) => {
-    // console.log('hard checking gameCell.coor', gameCell.coor.xCoor, gameCell.coor.yCoor);
     const adjCells = this.getAdjCells(gameCell);
 
     // if cell has a flag on it, do nothing
@@ -103,7 +107,6 @@ class GameBoard {
 
     //  if there is a bomb on this cell, return -1
     if (gameCell.hasBomb) {
-      console.log('bomb');
       return -1;
     }
 
@@ -122,7 +125,6 @@ class GameBoard {
 
       // if flag count equals bomb count, open adj squares
       if (adjFlags === gameCell.adjBombs && adjFlags !== 0) {
-        adjCells.forEach((cell) => console.log('adj Cell', cell.coor.xCoor, cell.coor.yCoor));
         const resultsOfAdjCheck = [];
         adjCells.forEach((cell) => {
           if (checkedCells.some((ele) => ele === cell)) return;

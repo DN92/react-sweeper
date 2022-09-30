@@ -89,7 +89,7 @@ function GameCellSingle({ xCoor, yCoor, gameBoard }) {
           <p
             cell-coor={`${xCoor}:${yCoor}`}
           >
-            {cell.isRevealed ? cell.adjBombs : ''}
+            {cell.isRevealed && cell.adjBombs > 0 ? cell.adjBombs : ''}
           </p>
         )}
     </div>
