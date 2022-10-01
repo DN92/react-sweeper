@@ -1,5 +1,5 @@
 import React from 'react';
-import GameContainer from './gameContainer/GameContainer';
+import GameContainer from '../../../gameContainer/GameContainer';
 
 function Home() {
   return (

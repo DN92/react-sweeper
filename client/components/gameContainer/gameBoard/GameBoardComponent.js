@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import useRerender from '../../hooks/useRerender';
-import useClickTracker from '../../hooks/useClickTracker';
+import useRerender from '../../../hooks/useRerender';
+import useClickTracker from '../../../hooks/useClickTracker';
 import GameBoardRow from './GameBoardRow';
 
 function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameStatus }) {
   const rerender = useRerender();
   const [currentCell, setCurrentCell] = useState(null);
   const [enableHighlighting, setEnableHighlighting] = useState(false);
-  const gameColumn = useMemo(() => new Array(rows).fill(1), [rows]);
+  const gameGrid = useMemo(() => new Array(rows).fill(1), [rows]);
   const [clickTracker, checkMouseDown, checkMouseUp, resetClickTracker] = useClickTracker();
 
   const handleMouseOver = (e) => {
@@ -82,7 +82,7 @@ function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameSta
       tabIndex={0}
       draggable={false}
     >
-      {gameColumn.map((row, idx) => (
+      {gameGrid.map((row, idx) => (
         <GameBoardRow
           key={`${row}:${idx}`}
           columns={columns}

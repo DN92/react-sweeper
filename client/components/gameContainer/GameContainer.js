@@ -1,8 +1,8 @@
 import React, { useMemo, useRef, useState, useReducer, useEffect } from 'react';
 import gameStatePresets from './gameStatePresets';
-import GameBoardComponent from '../gameBoard/GameBoardComponent';
-import GameBoard from './GameBoard';
-import GameMenu from './GameMenu';
+import GameBoardComponent from './gameBoard/GameBoardComponent';
+import GameBoard from '../../classes/GameBoard';
+import GameMenu from './gameHeader/GameMenu';
 
 const INIT = 'init';
 const RUNNING = 'running';

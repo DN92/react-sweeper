@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import FrontEndRoutes from '../FrontEndRoutes';
+import FrontEndRoutes from './FrontEndRoutes';
 
 function App() {
   return (
