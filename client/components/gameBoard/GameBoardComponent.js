@@ -55,8 +55,7 @@ function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameSta
 
   useEffect(() => {
     if (!currentCell) return;
-    if (clickTracker.hasOneThreeClick() && currentCell?.getIsRevealed()) {
-      console.log('here');
+    if (clickTracker.hasOneThreeClick() && currentCell.getIsRevealed()) {
       setEnableHighlighting(true);
     }
   }, [clickTracker, currentCell]);
@@ -64,7 +63,7 @@ function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameSta
   useEffect(() => {
     if (!currentCell) return;
     gameBoard.resetStylesOfBoard();
-    if (currentCell && enableHighlighting) {
+    if (enableHighlighting) {
       gameBoard.highLightAdjCells(currentCell);
     }
     rerender();
