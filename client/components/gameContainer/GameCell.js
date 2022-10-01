@@ -12,6 +12,10 @@ class GameCell {
     this.style = oldCell?.style || 'base';
   }
 
+  getIsRevealed() {
+    return this.isRevealed;
+  }
+
   setIsRevealed(bool) {
     this.isRevealed = bool;
   }

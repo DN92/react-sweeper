@@ -48,7 +48,6 @@ class GameBoard {
   }
 
   getCell(xCoor, yCoor) {
-    // console.log(this);
     return this.board[yCoor][xCoor];
   }
 
@@ -98,7 +97,13 @@ class GameBoard {
     return counter;
   }
 
-  hardCheckCell = (gameCell, checkedCells = []) => {
+  highLightAdjCells(gameCell) {
+    this.getAdjCells(gameCell).forEach((cell) => {
+      cell.setStyle('highlighted');
+    });
+  }
+
+  hardCheckCell(gameCell, checkedCells = []) {
     const adjCells = this.getAdjCells(gameCell);
 
     // if cell has a flag on it, do nothing
@@ -128,7 +133,7 @@ class GameBoard {
       if (adjFlags === gameCell.adjBombs && adjFlags !== 0) {
         const resultsOfAdjCheck = [];
         adjCells.forEach((cell) => {
-          if (checkedCells.some((ele) => ele === cell)) return;
+          if (checkedCells.some((ele) => ele === cell)) return; // exit condition
           checkedCells.push(cell);
           resultsOfAdjCheck.push(this.hardCheckCell(cell, checkedCells));
         });
@@ -137,7 +142,7 @@ class GameBoard {
     }
 
     return 1;
-  };
+  }
 }
 
 export default GameBoard;

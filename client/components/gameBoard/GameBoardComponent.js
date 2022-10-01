@@ -1,25 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import GameBoardRow from './GameBoardRow';
 import useRerender from '../../hooks/useRerender';
+import useClickTracker from '../../hooks/useClickTracker';
+import GameBoardRow from './GameBoardRow';
 
 function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameStatus }) {
   const rerender = useRerender();
-  const [currentCell, setCurrentCell] = useState({});
+  const [currentCell, setCurrentCell] = useState(null);
   const [enableHighlighting, setEnableHighlighting] = useState(false);
   const gameColumn = useMemo(() => new Array(rows).fill(1), [rows]);
-
-  const [cellLeftClicked, setCellLeftClicked] = useState(false);
-  const [cellRightClicked, setCellRightClicked] = useState(false);
-
-  const clickHandler = (e) => {
-    if (e.button === 0) setCellLeftClicked(true);
-    if (e.button === 2) setCellRightClicked(true);
-  };
-
-  const clickReset = () => {
-    setCellLeftClicked(false);
-    setCellRightClicked(false);
-  };
+  const [clickTracker, checkMouseDown, checkMouseUp, resetClickTracker] = useClickTracker();
 
   const handleMouseOver = (e) => {
     if (e.target.getAttribute('cell-coor')) {
@@ -30,53 +19,53 @@ function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameSta
 
   const handleMouseDown = (e) => {
     e.preventDefault();
-    clickHandler(e);
-    if (e.button === 2 && !currentCell.isRevealed) {
+    checkMouseDown(e);
+    if (e.button === 2 && !currentCell.getIsRevealed()) {
       currentCell?.toggleFlagged();
       rerender();
     }
   };
 
   const handleMouseUp = (e) => {
-    clickReset();
     setEnableHighlighting(false);
-    if (e.button === 0 && currentCell) {
+    if (
+      (clickTracker.hasOneThreeClick() && currentCell?.getIsRevealed())
+      || (e.button === 0 && !currentCell?.getIsRevealed())) {
       if (gameBoard.hardCheckCell(currentCell) === -1) {
         dispatchGameStatus({ type: 'lost' });
       }
       const { xCoor, yCoor } = currentCell.coor;
       gameBoard.remakeCell(currentCell);
-
       setCurrentCell(gameBoard.getCell(xCoor, yCoor));
     }
-  };
-
-  const handleRightClick = (e) => {
-    e.preventDefault();
+    checkMouseUp(e);
   };
 
   const handleMouseLeave = () => {
+    resetClickTracker();
     setEnableHighlighting(false);
+    setCurrentCell(null);
     rerender();
   };
 
   useEffect(() => {
-    setCellLeftClicked(false);
-    setCellRightClicked(false);
-    if (!currentCell?.isRevealed) setEnableHighlighting(false);
+    if (!currentCell) return;
+    if (!currentCell.getIsRevealed()) setEnableHighlighting(false);
   }, [currentCell]);
 
   useEffect(() => {
-    if (cellLeftClicked && cellRightClicked && currentCell?.isRevealed) {
+    if (!currentCell) return;
+    if (clickTracker.hasOneThreeClick() && currentCell?.getIsRevealed()) {
+      console.log('here');
       setEnableHighlighting(true);
     }
-  }, [cellLeftClicked, cellRightClicked, currentCell]);
+  }, [clickTracker, currentCell]);
 
   useEffect(() => {
+    if (!currentCell) return;
     gameBoard.resetStylesOfBoard();
     if (currentCell && enableHighlighting) {
-      const adjCells = gameBoard.getAdjCells(currentCell);
-      adjCells.forEach((cell) => { cell.setStyle('highlighted'); });
+      gameBoard.highLightAdjCells(currentCell);
     }
     rerender();
   }, [currentCell, enableHighlighting, gameBoard, rerender]);
@@ -86,7 +75,7 @@ function GameBoardComponent({ rows = 5, columns = 10, gameBoard, dispatchGameSta
       role="button"
       className="game-board"
       onMouseUp={(e) => handleMouseUp(e)}
-      onContextMenu={handleRightClick}
+      onContextMenu={(e) => e.preventDefault()}
       onMouseLeave={handleMouseLeave}
       onMouseDown={(e) => handleMouseDown(e)}
       onMouseOver={(e) => handleMouseOver(e)}

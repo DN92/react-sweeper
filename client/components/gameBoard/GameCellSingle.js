@@ -12,15 +12,6 @@ const boardCellBaseStyle = {
   boxSizing: 'border-box',
 };
 
-const boardCellHighlightedStyle = {
-  height: remAsString,
-  width: remAsString,
-  background: 'aqua',
-  border: `${(remSize * 8) / 100}rem outset aqua`,
-  overflow: 'none',
-  boxSizing: 'border-box',
-};
-
 const boardCellClearedStyle = {
   height: remAsString,
   width: remAsString,
@@ -31,23 +22,23 @@ const boardCellClearedStyle = {
 };
 
 function GameCellSingle({ xCoor, yCoor, gameBoard }) {
-  const cell = gameBoard.getCell(xCoor, yCoor);
+  const { isRevealed, hasBomb, isFlagged, adjBombs, style } = gameBoard.getCell(xCoor, yCoor);
 
   const image = (() => {
-    if (cell.isRevealed && cell.hasBomb) {
+    if (isRevealed && hasBomb) {
       return '/images/mine1.jpg';
     }
-    if (cell.isFlagged) {
+    if (isFlagged) {
       return '/images/redFlag.jpg';
     }
-    if (!cell.isRevealed || cell.adjBombs === 0) {
+    if (!isRevealed || adjBombs === 0) {
       return null;
     }
     return null;
   })();
 
-  const style = (() => {
-    switch (cell.style) {
+  const cellStyle = (() => {
+    switch (style) {
     case 'base':
       return boardCellBaseStyle;
     case 'highlighted':
@@ -60,7 +51,7 @@ function GameCellSingle({ xCoor, yCoor, gameBoard }) {
     }
   })();
   const color = (() => {
-    switch (cell.adjBombs) {
+    switch (adjBombs) {
     case 1:
       return 'blue';
     case 2:
@@ -87,7 +78,7 @@ function GameCellSingle({ xCoor, yCoor, gameBoard }) {
     <div
       className="game-board-cell"
       cell-coor={`${xCoor}:${yCoor}`}
-      style={style}
+      style={cellStyle}
       role="gridcell"
       tabIndex={0}
     >
@@ -105,7 +96,7 @@ function GameCellSingle({ xCoor, yCoor, gameBoard }) {
             style={{ color }}
             cell-coor={`${xCoor}:${yCoor}`}
           >
-            {cell.isRevealed && cell.adjBombs > 0 ? cell.adjBombs : ''}
+            {isRevealed && adjBombs > 0 ? adjBombs : ''}
           </p>
         )}
     </div>
