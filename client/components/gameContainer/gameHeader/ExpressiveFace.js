@@ -5,11 +5,18 @@ const RUNNING = 'running';
 const WON = 'won';
 const LOST = 'lost';
 
-function ExpressiveFace({ gameStatus, dispatchGameStatus, mouseDownOnBoard, clockReset }) {
+function ExpressiveFace({
+  gameStatus,
+  dispatchGameStatus,
+  mouseDownOnBoard,
+  clockReset,
+  createNewGame,
+}) {
   const handleClick = () => {
+    console.log('faceClick');
     clockReset();
     dispatchGameStatus({ type: INIT });
-    // make new game
+    createNewGame();
   };
 
   const image = (() => {
@@ -30,14 +37,15 @@ function ExpressiveFace({ gameStatus, dispatchGameStatus, mouseDownOnBoard, cloc
   })();
 
   return (
-    <div
-      role="button"
+    <button
+      type="button"
+      className="expressive-face"
       onClick={handleClick}
       onKeyPress={handleClick}
       tabIndex={0}
     >
-      <img src={image} alt="variable emoji" />
-    </div>
+      <img className="expressive-face-img" src={image} alt="variable emoji" />
+    </button>
   );
 }
 

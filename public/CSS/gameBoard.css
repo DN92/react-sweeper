@@ -1,4 +1,6 @@
 .game-board {
+  box-sizing: border-box;
+  border: 6px solid grey
 }
 
 .game-board-row {

@@ -1,0 +1,54 @@
+.game-header-container {
+  position: relative;
+  height: 4rem;
+  background-color: rgb(192, 192, 192);
+  box-sizing: border-box;
+  border: 6px solid grey;
+  border-bottom: none;
+}
+
+.game-header-container * {
+  overflow: none;
+}
+
+
+.game-menu {
+  position: absolute;
+  top: 50%;
+  left: .25rem;
+  transform: translate(0, -50%);
+}
+
+.expressive-face {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: none;
+  width: 3rem;
+}
+
+.expressive-face:active {
+  transform: translate(-49%, -49%);
+}
+
+.expressive-face-img {
+  object-fit: contain;
+  border: 2px solid black;
+  outline: 2px solid grey;
+  /* display: none; */
+}
+
+
+.clock-container {
+  position: absolute;
+  top: 50%;
+  right: .25rem;
+  transform: translate(0, -50%);
+}

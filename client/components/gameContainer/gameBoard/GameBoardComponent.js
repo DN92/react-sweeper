@@ -14,7 +14,8 @@ function GameBoardComponent({
   gameBoard,
   setMouseDownOnBoard,
   gameStatus,
-  dispatchGameStatus }) {
+  dispatchGameStatus,
+}) {
   const rerender = useRerender();
   const [currentCell, setCurrentCell] = useState(null);
   const [firstMove, setFirstMove] = useState(false);

@@ -2,8 +2,8 @@ import React from 'react';
 
 function GameMenu({ gameStatus }) {
   return (
-    <div>
-      GAME MENU game status is
+    <div className="game-menu">
+      GAME MENU/ status:
       {gameStatus}
     </div>
   );

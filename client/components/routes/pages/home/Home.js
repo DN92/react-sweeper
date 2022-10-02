@@ -3,9 +3,7 @@ import GameContainer from '../../../gameContainer/GameContainer';
 
 function Home() {
   return (
-    <div>
-      <GameContainer />
-    </div>
+    <GameContainer />
   );
 }
 

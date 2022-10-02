@@ -6,7 +6,6 @@ function App() {
   return (
     <BrowserRouter>
       <div id="App ">
-        COMPONENT PLACEHOLDER
         <FrontEndRoutes />
       </div>
     </BrowserRouter>
