@@ -12,15 +12,15 @@ function GameBoardComponent({
   rows = 5,
   columns = 10,
   gameBoard,
+  createNewGame,
   setMouseDownOnBoard,
+  setCellToReveal,
   updateBombCounter,
   gameStatus,
   dispatchGameStatus,
 }) {
   const rerender = useRerender();
   const [currentCell, setCurrentCell] = useState(null);
-  const [firstMove, setFirstMove] = useState(false);
-  const [recheckCell, setRecheckCell] = useState(false);
   const [enableHighlighting, setEnableHighlighting] = useState(false);
   const gameGrid = useMemo(() => new Array(rows).fill(1), [rows]);
   const [clickTracker, checkMouseDown, checkMouseUp, resetClickTracker] = useClickTracker();
@@ -60,11 +60,16 @@ function GameBoardComponent({
       (clickTracker.hasOneThreeClick() && currentCell?.getIsRevealed())
       || (e.button === 0 && !currentCell?.getIsRevealed())) {
       const result = gameBoard.hardCheckCell(currentCell);
-      if (result === -1 && firstMove) {
-        dispatchGameStatus({ type: INIT });
-        setRecheckCell(true);
+      console.log('result :', result);
+      if (result === -2) {
+        console.log('here', currentCell);
+        setCellToReveal(currentCell);
+        createNewGame();
       }
-      if (result === -1 && !firstMove) {
+      if (result === -1) {
+        dispatchGameStatus({ type: INIT });
+      }
+      if (result === -1) {
         dispatchGameStatus({ type: 'lost' });
       }
       const { xCoor, yCoor } = currentCell.coor;
@@ -105,13 +110,6 @@ function GameBoardComponent({
     }
     rerender();
   }, [currentCell, enableHighlighting, gameBoard, rerender]);
-
-  useEffect(() => {
-    if (recheckCell) {
-      setRecheckCell(false);
-      gameBoard.hardCheckCell(currentCell);
-    }
-  }, [recheckCell, currentCell, gameBoard]);
 
   return (
     <div

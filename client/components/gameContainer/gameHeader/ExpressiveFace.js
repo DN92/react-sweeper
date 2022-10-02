@@ -13,7 +13,6 @@ function ExpressiveFace({
   createNewGame,
 }) {
   const handleClick = () => {
-    console.log('faceClick');
     clockReset();
     dispatchGameStatus({ type: INIT });
     createNewGame();

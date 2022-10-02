@@ -20,12 +20,15 @@ function GameContainer() {
     gameSettings.bombs,
   ));
   const createNewGame = useCallback(() => {
-    setGameBoard(new GameBoard(
+    const newBoard = new GameBoard(
       gameSettings.size.rows,
       gameSettings.size.columns,
       gameSettings.bombs,
-    ));
+    );
+    setGameBoard(newBoard);
+    return newBoard;
   }, [gameSettings.size.rows, gameSettings.size.columns, gameSettings.bombs]);
+  const [cellToReveal, setCellToReveal] = useState(null);
   const [displayTime, clockActions] = useGameClock(3);
   const [gameStatus, dispatchGameStatus] = useReducer((state, action) => {
     switch (action.type) {
@@ -53,8 +56,28 @@ function GameContainer() {
   }, []);
 
   useEffect(() => {
+    if (cellToReveal) {
+      setCellToReveal(null);
+      let newBoard = null;
+      let result = gameBoard.hardCheckCell(cellToReveal);
+      while (result === -2) {
+        newBoard = createNewGame();
+        console.log('newBoard::::', newBoard.board[0][0].hasBomb);
+        console.log();
+        result = newBoard?.hardCheckCell(
+          newBoard.getCell(
+            cellToReveal.coor.xCoor,
+            cellToReveal.coor.yCoor,
+          ),
+        );
+      }
+    }
+  }, [cellToReveal, gameBoard, createNewGame]);
+
+  useEffect(() => {
     if (gameStatus === INIT) {
       clockActions.resetClock();
+      updateBombCounter();
     }
     if (gameStatus === RUNNING) {
       clockActions.startRunning();
@@ -62,7 +85,7 @@ function GameContainer() {
     if (gameStatus === WON || gameStatus === LOST) {
       clockActions.stopRunning();
     }
-  }, [gameStatus, clockActions, gameSettings]);
+  }, [gameStatus, clockActions, gameSettings, updateBombCounter]);
 
 
   return (
@@ -78,9 +101,11 @@ function GameContainer() {
       />
       <GameBoardComponent
         gameBoard={gameBoard}
+        createNewGame={createNewGame}
         gameStatus={gameStatus}
         updateBombCounter={updateBombCounter}
         setMouseDownOnBoard={setMouseDownOnBoard}
+        setCellToReveal={setCellToReveal}
         dispatchGameStatus={dispatchGameStatus}
       />
     </div>

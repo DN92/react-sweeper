@@ -39,11 +39,9 @@ class GameBoard {
       });
   }
 
-  resetStylesOfBoard() {
-    this.board.flat()
-      .forEach((cell) => {
-        cell.setDerivedStyle();
-      });
+
+  getBoardSize() {
+    return this.board.flat().length;
   }
 
   getCell(xCoor, yCoor) {
@@ -68,15 +66,13 @@ class GameBoard {
     return bombCount < 0 ? 0 : bombCount;
   }
 
-  remakeCell(cell) {
-    const { yCoor, xCoor } = cell.coor;
-    this.board[yCoor][xCoor] = new GameCell(null, null, { ...cell });
-  }
-
-  eachCells(callback) {
-    this.board.flat().forEach((cell) => {
-      callback(cell);
-    });
+  getRevealedCount() {
+    let counter = 0;
+    this.board.flat()
+      .forEach((cell) => {
+        if (cell.getIsRevealed()) counter++;
+      });
+    return counter;
   }
 
   getAdjCells(gameCell) {
@@ -120,6 +116,22 @@ class GameBoard {
     return counter;
   }
 
+  isFirstMove() {
+    return this.getRevealedCount() === 0;
+  }
+
+  remakeCell(cell) {
+    const { yCoor, xCoor } = cell.coor;
+    this.board[yCoor][xCoor] = new GameCell(null, null, { ...cell });
+  }
+
+  resetStylesOfBoard() {
+    this.board.flat()
+      .forEach((cell) => {
+        cell.setDerivedStyle();
+      });
+  }
+
   highLightAdjCells(gameCell) {
     this.getAdjCells(gameCell).forEach((cell) => {
       cell.setStyle('highlighted');
@@ -136,7 +148,7 @@ class GameBoard {
 
     //  if there is a bomb on this cell, return -1
     if (gameCell.hasBomb) {
-      return -1;
+      return this.isFirstMove() ? -2 : -1;
     }
 
     // if it's not yet been clicked on, get its surrounding bomb count
@@ -169,20 +181,8 @@ class GameBoard {
     return 1;
   }
 
-  getRevealedCellCount() {
-    let counter = 0;
-    this.eachCells((cell) => {
-      if (cell.getIsRevealed()) counter++;
-    });
-    return counter;
-  }
-
-  getBoardSize() {
-    return this.board.flat().length;
-  }
-
   isCleared() {
-    return this.getRevealedCellCount() >= (this.getBoardSize() - this.getTotalBombs());
+    return this.getRevealedCount() >= (this.getBoardSize() - this.getTotalBombs());
   }
 }
 
