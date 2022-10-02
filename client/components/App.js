@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import FrontEndRoutes from './FrontEndRoutes';
+import FrontEndRoutes from './routes/FrontEndRoutes';
 
 function App() {
   return (
     <BrowserRouter>
-      <div id="App">
-        APP COMPONENT PLACEHOLDER
+      <div id="App ">
+        COMPONENT PLACEHOLDER
         <FrontEndRoutes />
       </div>
     </BrowserRouter>

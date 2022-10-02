@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 function Navbar({ handleClick }) {
   return (
     <div>
-      <h1>APP NAME</h1>
+      <h1> NAME</h1>
       <nav>
         <div>
           <Link to="/home">Home</Link>

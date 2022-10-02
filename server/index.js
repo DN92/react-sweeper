@@ -52,10 +52,10 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).send(err.message || 'Endpoint Server Error');
 });
 
-function bootStartApp() {
+function bootStart() {
   console.log(
-    'Creating Server: ' +
-      (process.env.DATABASE_NAME || pkg.name || 'no name provided')
+    `Creating Server: ${
+      process.env.DATABASE_NAME || pkg.name || 'no name provided'}`,
   );
   if (require.main === module) {
     return startServer();
@@ -66,7 +66,7 @@ const startServer = () => {
   // syncDb()
   // start listening and creates a server object
   return app.listen(process.env.PORT, () => {
-    console.log(`App initializing. Now running on Port ${process.env.PORT}`);
+    console.log(` initializing. Now running on Port ${process.env.PORT}`);
   });
 };
 
@@ -74,6 +74,6 @@ const startServer = () => {
 //   await db.sync()
 // }
 
-const server = bootStartApp();
+const server = bootStart();
 
 module.exports = server;

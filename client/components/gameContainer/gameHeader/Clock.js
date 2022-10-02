@@ -1,9 +1,11 @@
-import React, { useState, useMemo, useReducer } from 'react';
+import React from 'react';
 
-function Clock({ gameStatue, dispatchGameState }) {
+function Clock({ displayTime }) {
   return (
     <div className="clock-container">
-      PLACE HOLDER
+      displayTime:
+      {' '}
+      {displayTime}
     </div>
   );
 }

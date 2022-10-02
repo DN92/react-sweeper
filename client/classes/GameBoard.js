@@ -40,20 +40,29 @@ class GameBoard {
   }
 
   resetStylesOfBoard() {
-    this.board.forEach((row) => {
-      row.forEach((cell) => {
+    this.board.flat()
+      .forEach((cell) => {
         cell.setDerivedStyle();
       });
-    });
   }
 
   getCell(xCoor, yCoor) {
     return this.board[yCoor][xCoor];
   }
 
+  getTotalBombs() {
+    return this.bombs;
+  }
+
   remakeCell(cell) {
     const { yCoor, xCoor } = cell.coor;
     this.board[yCoor][xCoor] = new GameCell(null, null, { ...cell });
+  }
+
+  eachCells(callback) {
+    this.board.flat().forEach((cell) => {
+      callback(cell);
+    });
   }
 
   getAdjCells(gameCell) {
@@ -141,7 +150,25 @@ class GameBoard {
       }
     }
 
+    if (this.isCleared()) return 2;
+
     return 1;
+  }
+
+  getRevealedCellCount() {
+    let counter = 0;
+    this.eachCells((cell) => {
+      if (cell.getIsRevealed()) counter++;
+    });
+    return counter;
+  }
+
+  getBoardSize() {
+    return this.board.flat().length;
+  }
+
+  isCleared() {
+    return this.getRevealedCellCount() >= (this.getBoardSize() - this.getTotalBombs());
   }
 }
 

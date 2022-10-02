@@ -16,6 +16,10 @@ class GameCell {
     return this.isRevealed;
   }
 
+  getIsFlagged() {
+    return this.isFlagged;
+  }
+
   setIsRevealed(bool) {
     this.isRevealed = bool;
   }
