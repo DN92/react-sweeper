@@ -11,6 +11,21 @@ const WON = 'won';
 const LOST = 'lost';
 
 function GameContainer() {
+  const initialRender = useRef(true);
+  const nextGameState = useRef(gameStatePresets.small);
+  const [gameSettings, setGameSetting] = useState(nextGameState.current);
+  const [gameBoard, setGameBoard] = useState(new GameBoard(
+    gameSettings.size.rows,
+    gameSettings.size.columns,
+    gameSettings.bombs,
+  ));
+  const createNewGame = useCallback(() => {
+    setGameBoard(new GameBoard(
+      gameSettings.size.rows,
+      gameSettings.size.columns,
+      gameSettings.bombs,
+    ));
+  }, [gameSettings.size.rows, gameSettings.size.columns, gameSettings.bombs]);
   const [displayTime, clockActions] = useGameClock(3);
   const [gameStatus, dispatchGameStatus] = useReducer((state, action) => {
     switch (action.type) {
@@ -27,22 +42,11 @@ function GameContainer() {
     }
   }, INIT);
 
-  const initialRender = useRef(true);
   const [mouseDownOnBoard, setMouseDownOnBoard] = useState(false);
-  const nextGameState = useRef(gameStatePresets.small);
-  const [gameSettings, setGameSetting] = useState(nextGameState.current);
-  const [gameBoard, setGameBoard] = useState(new GameBoard(
-    gameSettings.size.rows,
-    gameSettings.size.columns,
-    gameSettings.bombs,
-  ));
-  const createNewGame = useCallback(() => {
-    setGameBoard(new GameBoard(
-      gameSettings.size.rows,
-      gameSettings.size.columns,
-      gameSettings.bombs,
-    ));
-  }, [gameSettings.size.rows, gameSettings.size.columns, gameSettings.bombs]);
+  const [bombCounter, setBombCounter] = useState(gameBoard.getBombCounter());
+  const updateBombCounter = useCallback(() => {
+    setBombCounter(gameBoard.getBombCounter());
+  }, [gameBoard]);
 
   useEffect(() => {
     initialRender.current = false;
@@ -66,7 +70,7 @@ function GameContainer() {
       <GameHeader
         displayTime={displayTime}
         gameStatus={gameStatus}
-        gameBoard={gameBoard}
+        bombCounter={bombCounter}
         dispatchGameStatus={dispatchGameStatus}
         mouseDownOnBoard={mouseDownOnBoard}
         clockReset={clockActions.resetClock}
@@ -75,6 +79,7 @@ function GameContainer() {
       <GameBoardComponent
         gameBoard={gameBoard}
         gameStatus={gameStatus}
+        updateBombCounter={updateBombCounter}
         setMouseDownOnBoard={setMouseDownOnBoard}
         dispatchGameStatus={dispatchGameStatus}
       />

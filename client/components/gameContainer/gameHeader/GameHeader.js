@@ -7,6 +7,7 @@ import BombCounter from './BombCounter';
 function GameHeader({
   displayTime,
   gameStatus,
+  bombCounter,
   dispatchGameStatus,
   mouseDownOnBoard,
   clockReset,
@@ -14,8 +15,7 @@ function GameHeader({
 }) {
   return (
     <div className="game-header-container">
-      {/* <GameMenu gameStatus={gameStatus} /> */}
-      <BombCounter />
+      <BombCounter bombCounter={bombCounter} />
       <ExpressiveFace
         gameStatus={gameStatus}
         dispatchGameStatus={dispatchGameStatus}

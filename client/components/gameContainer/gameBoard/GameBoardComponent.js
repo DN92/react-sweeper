@@ -13,6 +13,7 @@ function GameBoardComponent({
   columns = 10,
   gameBoard,
   setMouseDownOnBoard,
+  updateBombCounter,
   gameStatus,
   dispatchGameStatus,
 }) {
@@ -50,6 +51,9 @@ function GameBoardComponent({
     setEnableHighlighting(false);
     if (e.button === 0) {
       setMouseDownOnBoard(false);
+    }
+    if (e.button === 2) {
+      updateBombCounter();
     }
     if ([WON, LOST].includes(gameStatus)) return;
     if (

@@ -54,6 +54,20 @@ class GameBoard {
     return this.bombs;
   }
 
+  getRedFlags() {
+    let counter = 0;
+    this.board.flat()
+      .forEach((cell) => {
+        if (cell.getIsFlagged()) counter++;
+      });
+    return counter;
+  }
+
+  getBombCounter() {
+    const bombCount = this.getTotalBombs() - this.getRedFlags();
+    return bombCount < 0 ? 0 : bombCount;
+  }
+
   remakeCell(cell) {
     const { yCoor, xCoor } = cell.coor;
     this.board[yCoor][xCoor] = new GameCell(null, null, { ...cell });
