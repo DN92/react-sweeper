@@ -46,15 +46,7 @@ class GameCell {
   }
 
   setDerivedStyle() {
-    if (this.isFlagged) {
-      this.style = 'base';
-      return;
-    }
-    if (this.isRevealed) {
-      this.setStyle('revealed');
-      return;
-    }
-    this.setStyle('base');
+    this.setStyle(this.isRevealed ? 'revealed' : 'base');
   }
 }
 
