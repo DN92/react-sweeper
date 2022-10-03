@@ -1,24 +1,32 @@
 const gameStatePresets = {
   small: {
     size: {
-      rows: 5,
-      columns: 10,
+      rows: 9,
+      columns: 9,
     },
-    bombs: 30,
+    bombs: 10,
   },
   medium: {
     size: {
-      rows: 12,
-      columns: 20,
+      rows: 16,
+      columns: 16,
     },
-    bombs: 50,
+    bombs: 40,
   },
   large: {
     size: {
-      rows: 12,
-      columns: 40,
+      rows: 16,
+      columns: 30,
     },
-    bombs: 100,
+    bombs: 99,
+  },
+
+  default: {
+    size: {
+      rows: 16,
+      columns: 30,
+    },
+    bombs: 99,
   },
 };
 

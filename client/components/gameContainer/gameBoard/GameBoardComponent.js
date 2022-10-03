@@ -9,8 +9,8 @@ const WON = 'won';
 const LOST = 'lost';
 
 function GameBoardComponent({
-  rows = 5,
-  columns = 10,
+  rows,
+  columns,
   gameBoard,
   createNewGame,
   setMouseDownOnBoard,
@@ -34,16 +34,15 @@ function GameBoardComponent({
 
   const handleMouseDown = (e) => {
     e.preventDefault();
-    checkMouseDown(e);
     if (!currentCell || ([WON, LOST].includes(gameStatus))) return;
+    checkMouseDown(e);
     if (e.button === 0
       && !currentCell.getIsRevealed()
       && !currentCell.getIsFlagged()) {
-      setMouseDownOnBoard(true);
+      setMouseDownOnBoard(true); // this is solely for the expressive face state
     }
     if (e.button === 2 && !currentCell.getIsRevealed()) {
       currentCell.toggleFlagged();
-      rerender();
     }
   };
 
@@ -66,7 +65,6 @@ function GameBoardComponent({
       }
       if (result === -1) {
         dispatchGameStatus({ type: LOST });
-        currentCell.setStyle('bust');
       }
       if (result === 1) {
         dispatchGameStatus({ type: RUNNING });
@@ -91,13 +89,10 @@ function GameBoardComponent({
 
   useEffect(() => {
     if (!currentCell) return;
-    if (!currentCell.getIsRevealed()) setEnableHighlighting(false);
-  }, [currentCell]);
-
-  useEffect(() => {
-    if (!currentCell) return;
     if (clickTracker.hasOneThreeClick() && currentCell.getIsRevealed()) {
       setEnableHighlighting(true);
+    } else {
+      setEnableHighlighting(false);
     }
   }, [clickTracker, currentCell]);
 
@@ -115,7 +110,6 @@ function GameBoardComponent({
       role="button"
       className="game-board"
       onMouseUp={(e) => handleMouseUp(e)}
-      onContextMenu={(e) => e.preventDefault()}
       onMouseLeave={handleMouseLeave}
       onMouseDown={(e) => handleMouseDown(e)}
       onMouseOver={(e) => handleMouseOver(e)}

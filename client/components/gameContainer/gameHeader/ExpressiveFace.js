@@ -21,7 +21,7 @@ function ExpressiveFace({
   };
 
   const image = (() => {
-    if (mouseDownOnBoard && gameStatus !== LOST) return '/images/openMouthFace.jpg';
+    if (mouseDownOnBoard && ![LOST, WON].includes(gameStatus)) return '/images/openMouthFace.jpg';
 
     switch (gameStatus) {
     case INIT:
@@ -29,7 +29,7 @@ function ExpressiveFace({
     case RUNNING:
       return '/images/happyFace.png';
     case WON:
-      return '/images/sunglassFace.jpg';
+      return '/images/sunglassFace.png';
     case LOST:
       return '/images/deadFace.jpg';
     default:

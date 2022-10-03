@@ -1,3 +1,7 @@
+/* this was part of an attempt to convert the Classes used in
+this program into custom Hooks to make it more 'react-y'
+Atm, this is unused code. */
+
 import { useState } from 'react';
 import useGameCell from './useGameCell';
 
@@ -10,7 +14,14 @@ const useGameBoard = (rows, columns, bombs) => {
     for (let i = 0; i < rows; i++) {
       const arrayRow = [];
       for (let j = 0; j < columns; j++) {
-        arrayRow.push(useGameCell(j, i));
+        arrayRow.push(useGameCell(j, i)); //  <<====== This line is the issue.
+        /*  I brainstormed a way to map an array of objects to GameCellComponents and translating
+        those objects into this hook localy. The problem I forsee with this approach is managing
+        state from the parent component would be more complicated, not less complicated. I would
+        have to write the [current] class  methods to take in coordinates and translate those into
+        the targeted cell, find the hook instance, and only then run local logic. I find this worse
+        than just using classes as it would change look uptimes from 1 to N and I don't see any pros
+        to this approach. */
       }
       board.push(arrayRow);
       setBoard((board) => [...board, arrayRow]);

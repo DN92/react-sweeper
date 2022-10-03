@@ -39,7 +39,6 @@ class GameBoard {
       });
   }
 
-
   getBoardSize() {
     return this.board.flat().length;
   }
@@ -142,18 +141,19 @@ class GameBoard {
     const adjCells = this.getAdjCells(gameCell);
 
     // if cell has a flag on it, do nothing
-    if (gameCell.isFlagged) {
-      return null;
-    }
+    if (gameCell.isFlagged) return 1;
 
     //  if there is a bomb on this cell, return -1
     if (gameCell.hasBomb) {
-      return this.isFirstMove() ? -2 : -1;
+      const result = this.isFirstMove() ? -2 : -1;
+      if (result === -1) gameCell.setStyle('bust');
+      return result;
     }
 
     // if it's not yet been clicked on, get its surrounding bomb count
     if (!gameCell.isRevealed) {
       gameCell.setIsRevealed(true);
+      gameCell.setStyle('revealed');
       if (gameCell.adjBombs === 0 && !gameCell.hasBomb) {
         adjCells.forEach((cell) => {
           checkedCells.push(cell);
@@ -176,9 +176,7 @@ class GameBoard {
       }
     }
 
-    if (this.isCleared()) return 2;
-
-    return 1;
+    return this.isCleared() ? 2 : 1;
   }
 
   isCleared() {

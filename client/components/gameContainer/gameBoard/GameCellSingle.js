@@ -33,10 +33,10 @@ function GameCellSingle({ xCoor, yCoor, gameBoard, gameStatus }) {
     if (style === 'bust') {
       return '/images/lastMine.png';
     }
-    if ([WON, LOST].includes(gameStatus) && hasBomb && isFlagged) {
+    if ([LOST].includes(gameStatus) && !hasBomb && isFlagged) {
       return '/images/redX.png';
     }
-    if ([WON, LOST].includes(gameStatus) && hasBomb) {
+    if ([WON, LOST].includes(gameStatus) && hasBomb && !isFlagged) {
       return '/images/mine1.jpg';
     }
     if (isFlagged) {

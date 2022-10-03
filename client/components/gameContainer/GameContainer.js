@@ -11,7 +11,7 @@ const WON = 'won';
 const LOST = 'lost';
 
 function GameContainer() {
-  const nextGameState = useRef(gameStatePresets.small);
+  const nextGameState = useRef(gameStatePresets.default);
   const [gameSettings, setGameSetting] = useState(nextGameState.current);
   const [gameBoard, setGameBoard] = useState(new GameBoard(
     gameSettings.size.rows,
@@ -83,7 +83,7 @@ function GameContainer() {
 
 
   return (
-    <div className="game-container">
+    <div className="game-container" onContextMenu={(e) => e.preventDefault()}>
       <GameHeader
         displayTime={displayTime}
         gameStatus={gameStatus}
@@ -95,6 +95,8 @@ function GameContainer() {
         setCellToReveal={setCellToReveal}
       />
       <GameBoardComponent
+        rows={gameBoard.rows || 4}
+        columns={gameBoard.columns || 4}
         gameBoard={gameBoard}
         createNewGame={createNewGame}
         gameStatus={gameStatus}

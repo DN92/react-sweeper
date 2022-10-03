@@ -1,3 +1,7 @@
+/* this was part of an attempt to convert the Classes used in
+this program into custom Hooks to make it more 'react-y'
+Atm, this is unused code. */
+
 import { useState } from 'react';
 
 const possibleStyles = ['base', 'highlighted', 'revealed', 'bust'];
