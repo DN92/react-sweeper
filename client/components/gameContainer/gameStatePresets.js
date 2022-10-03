@@ -4,7 +4,7 @@ const gameStatePresets = {
       rows: 5,
       columns: 10,
     },
-    bombs: 10,
+    bombs: 30,
   },
   medium: {
     size: {

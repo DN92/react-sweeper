@@ -1,5 +1,10 @@
 import React from 'react';
 
+const INIT = 'init';
+const RUNNING = 'running';
+const WON = 'won';
+const LOST = 'lost';
+
 const remSize = 2;
 const remAsString = `${remSize}rem`;
 
@@ -21,11 +26,17 @@ const boardCellClearedStyle = {
   boxSizing: 'border-box',
 };
 
-function GameCellSingle({ xCoor, yCoor, gameBoard }) {
+function GameCellSingle({ xCoor, yCoor, gameBoard, gameStatus }) {
   const { isRevealed, hasBomb, isFlagged, adjBombs, style } = gameBoard.getCell(xCoor, yCoor);
 
   const image = (() => {
-    if (isRevealed && hasBomb) {
+    if (style === 'bust') {
+      return '/images/lastMine.png';
+    }
+    if ([WON, LOST].includes(gameStatus) && hasBomb && isFlagged) {
+      return '/images/redX.png';
+    }
+    if ([WON, LOST].includes(gameStatus) && hasBomb) {
       return '/images/mine1.jpg';
     }
     if (isFlagged) {
@@ -46,6 +57,9 @@ function GameCellSingle({ xCoor, yCoor, gameBoard }) {
       return boardCellClearedStyle;
     case 'revealed':
       return boardCellClearedStyle;
+    case 'bust': {
+      return boardCellClearedStyle;
+    }
     default:
       return boardCellBaseStyle;
     }

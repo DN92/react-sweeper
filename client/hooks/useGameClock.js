@@ -1,5 +1,4 @@
 /* eslint no-param-reassign: 0 */
-
 import { useState, useMemo, useRef, useCallback } from 'react';
 
 function padInteger(int, desiredLength = 0) {
@@ -19,6 +18,7 @@ function padInteger(int, desiredLength = 0) {
 
 const useGameClock = (padding) => {
   const [clock, setClock] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
   const clockInterval = useRef(null);
   const displayTime = useMemo(
     () => padInteger(clock, padding),
@@ -27,27 +27,35 @@ const useGameClock = (padding) => {
 
   const startRunning = useCallback(
     () => {
-      clearInterval(clockInterval.current);
-      clockInterval.current = setInterval(() => {
-        setClock((clock) => clock + 1);
-      }, 1000);
+      if (!isRunning) {
+        setIsRunning(true);
+        clearInterval(clockInterval.current);
+        clockInterval.current = setInterval(() => {
+          setClock((clock) => clock + 1);
+        }, 1000);
+      }
     },
-    [setClock],
+    [setClock, isRunning],
   );
 
-  const stopRunning = () => {
+  const stopRunning = useCallback(() => {
+    setIsRunning(false);
     clearInterval(clockInterval.current);
-  };
+  }, []);
 
-  const resetClock = () => {
+  const resetClock = useCallback(() => {
+    clearInterval(clockInterval.current);
+    setIsRunning(false);
     setClock(0);
-  };
+  }, []);
 
-  const clockActions = {
-    setRunning: startRunning,
-    stopRunning,
-    resetClock,
-  };
+  const clockActions = useMemo(() => {
+    return {
+      startRunning,
+      stopRunning,
+      resetClock,
+    };
+  }, [startRunning, stopRunning, resetClock]);
 
   return [displayTime, clockActions];
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import Clock from './Clock';
 import ExpressiveFace from './ExpressiveFace';
-import GameMenu from './GameMenu';
 import BombCounter from './BombCounter';
 
 function GameHeader({
@@ -12,6 +11,7 @@ function GameHeader({
   mouseDownOnBoard,
   clockReset,
   createNewGame,
+  setCellToReveal,
 }) {
   return (
     <div className="game-header-container">
@@ -22,6 +22,7 @@ function GameHeader({
         mouseDownOnBoard={mouseDownOnBoard}
         clockReset={clockReset}
         createNewGame={createNewGame}
+        setCellToReveal={setCellToReveal}
       />
       <Clock displayTime={displayTime} />
     </div>

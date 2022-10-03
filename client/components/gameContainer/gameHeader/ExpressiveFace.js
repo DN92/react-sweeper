@@ -11,11 +11,13 @@ function ExpressiveFace({
   mouseDownOnBoard,
   clockReset,
   createNewGame,
+  setCellToReveal,
 }) {
   const handleClick = () => {
     clockReset();
     dispatchGameStatus({ type: INIT });
     createNewGame();
+    setCellToReveal(null);
   };
 
   const image = (() => {

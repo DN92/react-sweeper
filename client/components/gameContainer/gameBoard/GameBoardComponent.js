@@ -60,17 +60,16 @@ function GameBoardComponent({
       (clickTracker.hasOneThreeClick() && currentCell?.getIsRevealed())
       || (e.button === 0 && !currentCell?.getIsRevealed())) {
       const result = gameBoard.hardCheckCell(currentCell);
-      console.log('result :', result);
       if (result === -2) {
-        console.log('here', currentCell);
         setCellToReveal(currentCell);
         createNewGame();
       }
       if (result === -1) {
-        dispatchGameStatus({ type: INIT });
+        dispatchGameStatus({ type: LOST });
+        currentCell.setStyle('bust');
       }
-      if (result === -1) {
-        dispatchGameStatus({ type: 'lost' });
+      if (result === 1) {
+        dispatchGameStatus({ type: RUNNING });
       }
       const { xCoor, yCoor } = currentCell.coor;
       gameBoard.remakeCell(currentCell);
@@ -103,13 +102,13 @@ function GameBoardComponent({
   }, [clickTracker, currentCell]);
 
   useEffect(() => {
-    if (!currentCell) return;
+    if (!currentCell || [WON, LOST].includes(gameStatus)) return;
     gameBoard.resetStylesOfBoard();
     if (enableHighlighting) {
       gameBoard.highLightAdjCells(currentCell);
     }
     rerender();
-  }, [currentCell, enableHighlighting, gameBoard, rerender]);
+  }, [currentCell, enableHighlighting, gameBoard, gameStatus, rerender]);
 
   return (
     <div
@@ -130,6 +129,7 @@ function GameBoardComponent({
           columns={columns}
           yCoor={idx}
           gameBoard={gameBoard}
+          gameStatus={gameStatus}
         />
       ))}
     </div>

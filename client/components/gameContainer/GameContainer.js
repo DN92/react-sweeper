@@ -11,7 +11,6 @@ const WON = 'won';
 const LOST = 'lost';
 
 function GameContainer() {
-  const initialRender = useRef(true);
   const nextGameState = useRef(gameStatePresets.small);
   const [gameSettings, setGameSetting] = useState(nextGameState.current);
   const [gameBoard, setGameBoard] = useState(new GameBoard(
@@ -52,18 +51,12 @@ function GameContainer() {
   }, [gameBoard]);
 
   useEffect(() => {
-    initialRender.current = false;
-  }, []);
-
-  useEffect(() => {
     if (cellToReveal) {
       setCellToReveal(null);
       let newBoard = null;
       let result = gameBoard.hardCheckCell(cellToReveal);
       while (result === -2) {
         newBoard = createNewGame();
-        console.log('newBoard::::', newBoard.board[0][0].hasBomb);
-        console.log();
         result = newBoard?.hardCheckCell(
           newBoard.getCell(
             cellToReveal.coor.xCoor,
@@ -71,8 +64,9 @@ function GameContainer() {
           ),
         );
       }
+      dispatchGameStatus({ type: RUNNING });
     }
-  }, [cellToReveal, gameBoard, createNewGame]);
+  }, [cellToReveal, gameBoard, createNewGame, clockActions]);
 
   useEffect(() => {
     if (gameStatus === INIT) {
@@ -98,6 +92,7 @@ function GameContainer() {
         mouseDownOnBoard={mouseDownOnBoard}
         clockReset={clockActions.resetClock}
         createNewGame={createNewGame}
+        setCellToReveal={setCellToReveal}
       />
       <GameBoardComponent
         gameBoard={gameBoard}

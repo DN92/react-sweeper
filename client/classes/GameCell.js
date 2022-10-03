@@ -37,7 +37,7 @@ class GameCell {
   }
 
   setStyle(newStyle) {
-    const possibleStyles = ['base', 'highlighted', 'revealed'];
+    const possibleStyles = ['base', 'highlighted', 'revealed', 'bust'];
     if (possibleStyles.includes(newStyle.toLowerCase())) {
       this.style = newStyle;
       return true;
