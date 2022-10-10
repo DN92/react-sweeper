@@ -11,12 +11,25 @@
   overflow: none;
 }
 
-
-.bomb-counter {
+.bomb-counter-wrapper {
   position: absolute;
   top: 50%;
-  left: .25rem;
+  left: .5rem;
   transform: translate(0, -50%);
+  background-color: black;
+  border: 2px solid white;
+  min-width: 4.2rem;
+  height: 60%;
+  box-sizing: border-box;
+  padding: .25rem .5rem .25rem .5rem;
+}
+
+
+.bomb-counter {
+  height: 100%;
+  width: 100%;
+  color: red;
+  font-size: 2rem;
 }
 
 .expressive-face {
@@ -42,13 +55,25 @@
   object-fit: contain;
   border: 2px solid black;
   outline: 2px solid grey;
-  /* display: none; */
 }
 
 
-.clock-container {
+.clock-wrapper {
   position: absolute;
   top: 50%;
   right: .25rem;
   transform: translate(0, -50%);
+  background-color: black;
+  border: 2px solid white;
+  height: 60%;
+  box-sizing: border-box;
+  padding: .25rem .5rem .25rem .5rem;
+  min-width: 4.2rem;
+}
+
+.clock {
+  height: 100%;
+  width: 100%;
+  color: red;
+  font-size: 2rem;
 }

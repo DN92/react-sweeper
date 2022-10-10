@@ -12,6 +12,10 @@ class GameCell {
     this.style = oldCell?.style || 'base';
   }
 
+  getAdjBombCount() {
+    return this.adjBombs;
+  }
+
   getIsRevealed() {
     return this.isRevealed;
   }

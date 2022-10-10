@@ -165,7 +165,7 @@ class GameBoard {
       const adjFlags = this.getAdjFlagCount(gameCell);
 
       // if flag count equals bomb count, open adj squares
-      if (adjFlags === gameCell.adjBombs && adjFlags !== 0) {
+      if (adjFlags === gameCell.adjBombs) {
         const resultsOfAdjCheck = [];
         adjCells.forEach((cell) => {
           if (checkedCells.some((ele) => ele === cell)) return; // exit condition
